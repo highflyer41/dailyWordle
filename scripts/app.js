@@ -12,7 +12,7 @@ const closeButton = document.querySelector('.close');
 
 let wordle;
 const getWordle = () => {
-    fetch('http://localhost:8000/word')
+    fetch('https://daily-wordle.herokuapp.com/word')
         .then(res => res.json())
         .then(json => {
             wordle = json.toUpperCase();
@@ -110,7 +110,7 @@ const checkRow = async () => {
         flipTile();
         const guess = guessRows[currentRow].join('');
 
-        await fetch(`http://localhost:8000/check/?word=${guess}`)
+        await fetch(`https://daily-wordle.herokuapp.com/check/?word=${guess}`)
             .then((res) => res.json())
             .then(json => {
                 if (json == false) {
