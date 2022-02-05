@@ -107,22 +107,16 @@ const deleteLetter = () => {
 
 const checkRow = async () => {
     if (currentTile > 4 && !isGameOver) {
-        flipTile();
         const guess = guessRows[currentRow].join('');
 
         await fetch(`https://daily-wordle.herokuapp.com/check/?word=${guess}`)
             .then((res) => res.json())
             .then(json => {
                 if (json == false) {
-                    if (currentRow >= 5) {
-                        isGameOver = true;
-                        showMessage('Game Over! Try Again! Word was: ' + wordle);
-                        clearInterval(update);
-                    } else {
-                        showMessage('Not a valid word guess!')
-                    }
+                    showMessage('Not a valid word guess!');
                     return
                 } else {
+                    flipTile();
                     if (guess == wordle) {
                         isGameOver = true;
                         showMessage('Excellent job! You Won!');
@@ -135,13 +129,13 @@ const checkRow = async () => {
                             showMessage('Game Over! Try Again! Word was: ' + wordle);
                             clearInterval(update);
                             return;
+                        } else {
+                            currentRow++;
+                            currentTile = 0;
                         }
                     }
                 }
             }).catch(err => console.log(err));
-
-            currentRow++;
-            currentTile = 0;
     }
 }
 
@@ -255,8 +249,8 @@ const updateScore = () => {
     scoreCountdown.textContent = currentScore;
 
     if (currentScore == 0) {
-        showMessage('Game Over! Try Again! Word was: ' + wordle);
         isGameOver = true;
+        showMessage('Game Over! Try Again! Word was: ' + wordle);
         clearInterval(update);
         return;
     }
